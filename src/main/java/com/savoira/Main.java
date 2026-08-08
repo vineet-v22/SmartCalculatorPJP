@@ -20,10 +20,10 @@ public class Main {
                 break;
             }
 
-            double a;
+            double FirstNumber;
 
             try {
-                a = Double.parseDouble(input);
+                FirstNumber = Double.parseDouble(input);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number. Try again.");
                 continue;
@@ -33,10 +33,10 @@ public class Main {
             String op = sc.nextLine().trim();
 
             System.out.println("Enter second number: ");
-            double b;
+            double SecondNumber;
 
             try {
-                b = Double.parseDouble(sc.nextLine().trim());
+                SecondNumber = Double.parseDouble(sc.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number. Try again.");
                 continue;
@@ -44,21 +44,21 @@ public class Main {
 
             double result = switch (op) {
 
-                case "+" -> a + b;
+                case "+" -> FirstNumber + SecondNumber;
 
-                case "-" -> a - b;
+                case "-" -> FirstNumber - SecondNumber;
 
-                case "*" -> a * b;
+                case "*" -> FirstNumber * SecondNumber;
 
                 case "/" -> {
-                    if (b == 0) {
+                    if (SecondNumber == 0) {
                         System.out.println("Error: Division by zero");
                         yield Double.NaN;
                     }
-                    yield a / b;
+                    yield FirstNumber / SecondNumber;
                 }
 
-                case "%" -> a % b;
+                case "%" -> FirstNumber % SecondNumber;
 
                 default -> {
                     System.out.println("Unknown Operator: " + op);
