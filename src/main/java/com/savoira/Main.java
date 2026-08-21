@@ -5,24 +5,55 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
+/**
+ * Entry point of the SmartCalculator application.
+ * Handles user input and interacts with the Calculator class.
+ */
 public class Main {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
+    /**
+     * Starts the SmartCalculator application.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+        Calculator calculator = new Calculator();
 
-        log.info("=== SmartCalculator ===");
-        log.info("Type 'exit' to quit.");
+        LOG.info("=== SmartCalculator ===");
+        LOG.info("Type 'exit' to quit.");
 
         while (true) {
+            LOG.info("Enter operator (+ - * / % sqrt percent): ");
+            String operator = sc.nextLine().trim();
 
-            log.info("Enter first number (or 'exit'): ");
+            if (operator.equalsIgnoreCase("sqrt")) {
+
+                LOG.info("Enter number: ");
+                String input = sc.nextLine().trim();
+                double number;
+                try {
+                    number = Double.parseDouble(input);
+                } catch (NumberFormatException e) {
+                    LOG.warn("Invalid number entered: {}", input);
+                    LOG.info("Please enter a valid number.");
+                    continue;
+                }
+
+                double result = Calculator.squareRoot(number);
+                LOG.info("Result: {}", String.format("%.3f", result));
+                continue;
+
+            }
+
+            LOG.info("Enter first number (or 'exit'): ");
             String input = sc.nextLine().trim();
 
             if (input.equalsIgnoreCase("exit")) {
-                log.info("User chose to exit the calculator.");
+                LOG.info("User chose to exit the calculator.");
                 break;
             }
 
@@ -31,57 +62,34 @@ public class Main {
             try {
                 firstNumber = Double.parseDouble(input);
             } catch (NumberFormatException e) {
-                log.warn("Invalid number entered: {}", input);
-                log.info("Please enter a valid number.");
+                LOG.warn("Invalid number entered: {}", input);
+                LOG.info("Please enter a valid number.");
                 continue;
             }
 
-            log.info("Enter Operator (+ - * / %): ");
-            String op = sc.nextLine().trim();
-
-            log.info("Enter second number: ");
+            LOG.info("Enter second number: ");
             double secondNumber;
 
             try {
                 secondNumber = Double.parseDouble(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                log.warn("Invalid second number entered.");
-                log.info("Please enter a valid number.");
+                LOG.warn("Invalid second number entered.");
+                LOG.info("Please enter a valid number.");
                 continue;
             }
 
-            double result = switch (op) {
+            Operation operation =
+                    new Operation(firstNumber, operator, secondNumber);
 
-                case "+" -> firstNumber + secondNumber;
-
-                case "-" -> firstNumber - secondNumber;
-
-                case "*" -> firstNumber * secondNumber;
-
-                case "/" -> {
-                    if (secondNumber == 0) {
-                        log.error("Division by zero is not allowed.");
-                        yield Double.NaN;
-                    }
-
-                    yield firstNumber / secondNumber;
-                }
-
-                case "%" -> firstNumber % secondNumber;
-
-                default -> {
-                    log.warn("Unknown operator entered: {}", op);
-                    yield Double.NaN;
-                }
-            };
+            double result = calculator.calculate(operation);
 
             if (!Double.isNaN(result)) {
-                log.info("Result: {}", String.format("%.3f", result));
+                LOG.info("Result: {}", String.format("%.3f", result));
             }
         }
 
         sc.close();
 
-        log.info("See you again!");
+        LOG.info("See you again!");
     }
 }
