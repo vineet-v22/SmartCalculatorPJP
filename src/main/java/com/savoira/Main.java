@@ -33,13 +33,20 @@ public class Main {
             if (operator.equalsIgnoreCase("sqrt")) {
 
                 LOG.info("Enter number: ");
-                double number = Double.parseDouble(sc.nextLine().trim());
+                String input = sc.nextLine().trim();
+                double number;
+                try {
+                    number = Double.parseDouble(input);
+                } catch (NumberFormatException e) {
+                    LOG.warn("Invalid number entered: {}", input);
+                    LOG.info("Please enter a valid number.");
+                    continue;
+                }
 
                 double result = Calculator.squareRoot(number);
-
                 LOG.info("Result: {}", String.format("%.3f", result));
-
                 continue;
+
             }
 
             LOG.info("Enter first number (or 'exit'): ");
