@@ -39,7 +39,13 @@ public class Calculator {
                 yield firstNumber / secondNumber;
             }
 
-            case "%" -> (firstNumber % secondNumber);
+            case "%" -> {
+                if (secondNumber == 0) {
+                    LOG.error("Division by zero is not allowed.");
+                    yield Double.NaN;
+                }
+                yield firstNumber % secondNumber;
+            }
 
             case "percent" -> percentage(firstNumber, secondNumber);
 
@@ -68,6 +74,9 @@ public class Calculator {
      * @return the square root of the number
      */
     public static double squareRoot(double number) {
+        if(number<0){
+            LOG.error("Number should be Non-Zero");
+        }
         return Math.sqrt(number);
     }
 }
